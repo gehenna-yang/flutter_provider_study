@@ -1,4 +1,4 @@
-# infrearnclass
+# inflearnclass
 
 A new Flutter project.
 
