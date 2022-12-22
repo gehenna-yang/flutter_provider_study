@@ -48,12 +48,12 @@ class RestaurantScreen extends StatelessWidget {
                     return SizedBox(height: 16);
                   },
                   itemBuilder: (_, index) {
-                    final pitem = RestaurantModel.fromJson(item: snapshot.data![index]);
+                    final pitem = RestaurantModel.fromJson(snapshot.data![index]);
 
                     return GestureDetector(
                       child: RestaurantCard.fromModel(model: pitem),
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => Restaurant_Detail_Screen(id: pitem.id,)));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => Restaurant_Detail_Screen(id: pitem.id, name: pitem.name,)));
                       },
                     );
                   },

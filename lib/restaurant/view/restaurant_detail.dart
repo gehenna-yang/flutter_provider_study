@@ -8,9 +8,11 @@ import 'package:infrearnclass/restaurant/model/restaurant_detail_model.dart';
 
 class Restaurant_Detail_Screen extends StatelessWidget {
   final String id;
+  final String name;
 
   const Restaurant_Detail_Screen({
     required this.id,
+    required this.name,
     Key? key
   }) : super(key: key);
 
@@ -36,7 +38,7 @@ class Restaurant_Detail_Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      titletxt: '불타는 떡볶이',
+      titletxt: name,
       child: FutureBuilder<Map<String, dynamic>>(
         future: getRestaurantDetail(),
         builder: (_, AsyncSnapshot<Map<String, dynamic>>snapshot) {
@@ -44,7 +46,7 @@ class Restaurant_Detail_Screen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator(),);
           }
 
-          final item = RestaurantDetailModel.fromJson(json: snapshot.data!);
+          final item = RestaurantDetailModel.fromJson(snapshot.data!);
 
           return CustomScrollView(
             slivers: [

@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infrearnclass/common/const/data.dart';
+import 'package:infrearnclass/common/utils/data_utils.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'restaurant_model.g.dart';
 
 enum RestaurantPriceRange{
   expensive,
@@ -8,6 +12,7 @@ enum RestaurantPriceRange{
   cheap,
 }
 
+@JsonSerializable()
 class RestaurantModel {
   RestaurantModel({
     required this.id,
@@ -23,6 +28,9 @@ class RestaurantModel {
 
   final String id;
   final String name;
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String thumbUrl;
   final List<String> tags;
   final RestaurantPriceRange priceRange;
@@ -31,21 +39,6 @@ class RestaurantModel {
   final int deliveryTime;
   final int deliveryFee;
 
-  factory RestaurantModel.fromJson({
-    required Map<String, dynamic> item,
-  }) {
-    return RestaurantModel(
-        id: item['id'],
-        name: item['name'],
-        thumbUrl: 'http://$ip${item['thumbUrl']}',
-        tags: List<String>.from(item['tags']),
-        priceRange: RestaurantPriceRange.values.firstWhere(
-              (e) => e.name == item['priceRange'],
-        ),
-        ratings: item['ratings'],
-        ratingsCount: item['ratingsCount'],
-        deliveryTime: item['deliveryTime'],
-        deliveryFee: item['deliveryFee']
-    );
-  }
+  factory RestaurantModel.fromJson(Map<String, dynamic> json) => _$RestaurantModelFromJson(json);
+  Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
 }
