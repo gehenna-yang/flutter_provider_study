@@ -3,28 +3,23 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:infrearnclass/common/const/data.dart';
+import 'package:infrearnclass/common/dio/dio.dart';
 import 'package:infrearnclass/restaurant/component/restaurant_card.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
+import 'package:infrearnclass/restaurant/repository/restaurant_repository.dart';
 import 'package:infrearnclass/restaurant/view/restaurant_detail.dart';
 
 class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({Key? key}) : super(key: key);
 
-  Future<List> paginateRestaurant() async{
+  Future<List<RestaurantModel>> paginateRestaurant() async{
     final dio = Dio();
 
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    dio.interceptors.add(CustomInterceptor(storage: storage));
 
-    final resp = await dio.get(
-      'http://$ip/restaurant',
-      options: Options(
-        headers: {
-          'authorization':'Bearer $accessToken',
-        }
-      ),
-    );
+    final response = await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant').paginate();
 
-    return resp.data['data'];
+    return response.data;
   }
 
   @override
@@ -33,14 +28,12 @@ class RestaurantScreen extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: FutureBuilder<List>(
+          child: FutureBuilder<List<RestaurantModel>>(
             future: paginateRestaurant(),
-            builder: (context, AsyncSnapshot<List> snapshot) {
+            builder: (context, AsyncSnapshot<List<RestaurantModel>> snapshot) {
               if(!snapshot.hasData){
                 return Container();
               }
-
-              print(snapshot.data);
 
               return ListView.separated(
                   itemCount: snapshot.data!.length,
@@ -48,7 +41,7 @@ class RestaurantScreen extends StatelessWidget {
                     return SizedBox(height: 16);
                   },
                   itemBuilder: (_, index) {
-                    final pitem = RestaurantModel.fromJson(snapshot.data![index]);
+                    final pitem = snapshot.data![index];
 
                     return GestureDetector(
                       child: RestaurantCard.fromModel(model: pitem),
