@@ -3,27 +3,30 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:infrearnclass/common/component/custom_text_form_field.dart';
 import 'package:infrearnclass/common/const/colors.dart';
 import 'package:infrearnclass/common/const/data.dart';
+import 'package:infrearnclass/common/dio/dio.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
+import 'package:infrearnclass/common/secure_storage/secure_storage.dart';
 import 'package:infrearnclass/common/view/root_tab.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String userId = '';
   String userPwd = '';
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
+    final dio = ref.watch(dioProvider);
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -76,6 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       final refreshtoken = resp.data['refreshToken'];
                       final accesstoken = resp.data['accessToken'];
+
+                      final storage = ref.read(secureStorageProvider);
 
                       storage.write(key: ACCESS_TOKEN_KEY, value: accesstoken);
                       storage.write(key: REFRESH_TOKEN_KEY, value: refreshtoken);
