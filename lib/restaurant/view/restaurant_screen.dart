@@ -12,26 +12,72 @@ import 'package:infrearnclass/restaurant/provider/restaurant_provider.dart';
 import 'package:infrearnclass/restaurant/repository/restaurant_repository.dart';
 import 'package:infrearnclass/restaurant/view/restaurant_detail.dart';
 
-class RestaurantScreen extends ConsumerWidget {
+class RestaurantScreen extends ConsumerStatefulWidget {
   const RestaurantScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RestaurantScreen> createState() => _RestaurantScreenState();
+}
+
+class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
+
+  final ScrollController controller = ScrollController();
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(scrollListener);
+  }
+
+  void scrollListener() {
+    if(controller.offset > controller.position.maxScrollExtent - 300){
+      ref.read(restaurantProvider.notifier).paginate(fetchMore: true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final data = ref.watch(restaurantProvider);
 
-    if(data.length == 0){
-      return Center(child: CircularProgressIndicator(),);
+    // first loading
+    if(data is CursorPaginationLoading){
+      return const Center(child: CircularProgressIndicator(),);
     }
+
+    // error
+    if(data is CursorPaginationError) {
+      return Center(child: Text(data.message),);
+    }
+
+    // CursorPagination
+    // CursorPaginationFetchingMore
+    // CursorPaginationRefetching
+
+    final cp = data as CursorPagination;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.separated(
-        itemCount: data.length,
+        controller: controller,
+        itemCount: cp.data.length+1,
         separatorBuilder: (_, index) {
           return SizedBox(height: 16);
         },
         itemBuilder: (_, index) {
-          final pitem = data[index];
+          if(index == cp.data.length){
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Center(
+                child: data is CursorPaginationFetchingMore ?
+                  CircularProgressIndicator() :
+                  Text('마지막 데이터입니다.'),
+              ),
+            );
+          }
+
+          final pitem = cp.data[index];
 
           return GestureDetector(
             child: RestaurantCard.fromModel(model: pitem),
