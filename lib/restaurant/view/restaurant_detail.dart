@@ -10,6 +10,7 @@ import 'package:infrearnclass/restaurant/model/restaurant_detail_model.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
 import 'package:infrearnclass/restaurant/provider/restaurant_provider.dart';
 import 'package:infrearnclass/restaurant/repository/restaurant_repository.dart';
+import 'package:skeletons/skeletons.dart';
 
 class Restaurant_Detail_Screen extends ConsumerStatefulWidget {
   final String id;
@@ -46,12 +47,33 @@ class _Restaurant_Detail_ScreenState extends ConsumerState<Restaurant_Detail_Scr
       child: CustomScrollView(
         slivers: [
           renderTop(model: state),
+          if(state is! RestaurantDetailModel)
+            renderLoading(),
           if(state is RestaurantDetailModel)
             renderLabel(),
           if(state is RestaurantDetailModel)
             renderProduct(products: state.products),
         ],
       )
+    );
+  }
+
+  SliverPadding renderLoading() {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(
+          List.generate(3, (index) => Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: SkeletonParagraph(
+              style: SkeletonParagraphStyle(
+                lines: 5,
+                padding: EdgeInsets.zero
+              ),
+            ),
+          )),
+        ),
+      ),
     );
   }
 
