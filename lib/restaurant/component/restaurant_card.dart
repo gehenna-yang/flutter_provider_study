@@ -14,6 +14,7 @@ class RestaurantCard extends StatelessWidget {
   final double ratings;
   final bool isDetail;
   final String? detail;
+  final String? heroKey;
 
   const RestaurantCard({
     required this.image,
@@ -24,6 +25,7 @@ class RestaurantCard extends StatelessWidget {
     required this.deliveryFee,
     required this.ratings,
     this.isDetail = false,
+    this.heroKey,
     this.detail,
     Key? key,
   }) : super(key: key);
@@ -35,6 +37,7 @@ class RestaurantCard extends StatelessWidget {
     return RestaurantCard(
       image: Image.network(model.thumbUrl, fit: BoxFit.cover,),
       name: model.name,
+      heroKey: model.id,
       tags: List<String>.from(model.tags),
       ratingsCount: model.ratingsCount,
       deliveryTime: model.deliveryTime,
@@ -49,10 +52,17 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        isDetail ?
-          image:
+        if(heroKey != null)
+          Hero(
+            tag: ObjectKey(heroKey),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(isDetail ? 0:12),
+              child: image,
+            ),
+          ),
+        if(heroKey == null)
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(isDetail ? 0:12),
             child: image,
           ),
         const SizedBox(height: 16,),
