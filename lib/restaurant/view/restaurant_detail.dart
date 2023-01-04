@@ -5,6 +5,7 @@ import 'package:infrearnclass/common/const/data.dart';
 import 'package:infrearnclass/common/dio/dio.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
 import 'package:infrearnclass/product/component/product_card.dart';
+import 'package:infrearnclass/rating/component/rating_card.dart';
 import 'package:infrearnclass/restaurant/component/restaurant_card.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_detail_model.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
@@ -53,6 +54,18 @@ class _Restaurant_Detail_ScreenState extends ConsumerState<Restaurant_Detail_Scr
             renderLabel(),
           if(state is RestaurantDetailModel)
             renderProduct(products: state.products),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: RatingCard(
+                rating: 4,
+                email: 'jc@codefactory.ai',
+                images: [],
+                avatarImage: AssetImage('asset/img/logo/codefactory_logo.png'),
+                content: 'good job',
+              ),
+            ),
+          ),
         ],
       )
     );
