@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infrearnclass/common/const/data.dart';
+import 'package:infrearnclass/common/model/model_with_id.dart';
 import 'package:infrearnclass/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -13,7 +14,7 @@ enum RestaurantPriceRange{
 }
 
 @JsonSerializable()
-class RestaurantModel {
+class RestaurantModel implements IModelWithId{
   RestaurantModel({
     required this.id,
     required this.name,

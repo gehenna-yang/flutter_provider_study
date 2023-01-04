@@ -1,6 +1,7 @@
 
 
 import 'package:infrearnclass/common/const/data.dart';
+import 'package:infrearnclass/common/model/model_with_id.dart';
 import 'package:infrearnclass/common/utils/data_utils.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -31,7 +32,7 @@ class RestaurantDetailModel extends RestaurantModel{
 }
 
 @JsonSerializable()
-class RestaurantProductModel {
+class RestaurantProductModel implements IModelWithId{
   RestaurantProductModel({
     required this.id,
     required this.name,
