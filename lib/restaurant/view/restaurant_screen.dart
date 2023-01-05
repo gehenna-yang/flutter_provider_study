@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infrearnclass/common/const/data.dart';
 import 'package:infrearnclass/common/dio/dio.dart';
 import 'package:infrearnclass/common/model/cusor_pagination_model.dart';
+import 'package:infrearnclass/common/utils/pagination_utils.dart';
 import 'package:infrearnclass/restaurant/component/restaurant_card.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
 import 'package:infrearnclass/restaurant/provider/restaurant_provider.dart';
@@ -32,9 +33,10 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
   }
 
   void scrollListener() {
-    if(controller.offset > controller.position.maxScrollExtent - 300){
-      ref.read(restaurantProvider.notifier).paginate(fetchMore: true);
-    }
+    // if(controller.offset > controller.position.maxScrollExtent - 300){
+    //   ref.read(restaurantProvider.notifier).paginate(fetchMore: true);
+    // }
+    PaginationUtils.paginate(controller: controller, provider: ref.read(restaurantProvider.notifier));
   }
 
   @override

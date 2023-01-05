@@ -30,7 +30,7 @@ class CursorPagination<T> extends CursorPaginationBase {
     CursorPaginationMeta? meta,
     List<T>? data,
   }) {
-    return CursorPagination(meta: meta?? this.meta, data: data?? this.data);
+    return CursorPagination<T>(meta: meta?? this.meta, data: data?? this.data);
   }
 
   factory CursorPagination.fromJson(Map<String, dynamic> json, T Function(Object? json) fromJsonT) => _$CursorPaginationFromJson(json, fromJsonT);
