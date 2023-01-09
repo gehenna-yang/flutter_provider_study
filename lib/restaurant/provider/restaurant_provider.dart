@@ -4,6 +4,7 @@ import 'package:infrearnclass/common/model/pagination_params.dart';
 import 'package:infrearnclass/common/provider/pagination_provider.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
 import 'package:infrearnclass/restaurant/repository/restaurant_repository.dart';
+import 'package:collection/collection.dart';
 
 final restaurantDetailProvider = Provider.family<RestaurantModel?, String>((ref, id) {
   final state = ref.watch(restaurantProvider);
@@ -12,7 +13,7 @@ final restaurantDetailProvider = Provider.family<RestaurantModel?, String>((ref,
     return null;
   }
 
-  return state.data.firstWhere((element) => element.id == id);
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
 
 final restaurantProvider = StateNotifierProvider<RestaurantStateNotifier, CursorPaginationBase>(
@@ -50,11 +51,23 @@ class RestaurantStateNotifier extends PaginationProvider<RestaurantModel, Restau
     final resp = await repository.getRestaurantDetail(id: id);
 
     // [RestaurantModel(1), RestaurantModel(2), RestaurantModel(3)]
-    // id : 2인 친구를 Detail Model을 가져와라
-    // getDetail(id: 2);
-    // [RestaurantDetailModel(1), RestaurantDetailModel(2), RestaurantDetailModel(3)]
-    state = pstate.copyWith(
-        data: pstate.data.map<RestaurantModel>((e) => e.id == id ? resp : e).toList()
-    );
+    // 요청 id: 10
+    // list.where((e) => e.id == 10) 데이터 X
+    // 데이터가 없을때는 그냥 캐시의 끝에다가 데이터를 추가해버린다.
+    // [RestaurantModel(1), RestaurantModel(2), RestaurantModel(3), ..... , RestaurantModel(10)]
+    if(pstate.data.where((e) => e.id == id).isEmpty){
+      state = pstate.copyWith(data: <RestaurantModel>[
+        ...pstate.data,
+        resp,
+      ]);
+    } else {
+      // [RestaurantModel(1), RestaurantModel(2), RestaurantModel(3)]
+      // id : 2인 친구를 Detail Model을 가져와라
+      // getDetail(id: 2);
+      // [RestaurantDetailModel(1), RestaurantDetailModel(2), RestaurantDetailModel(3)]
+      state = pstate.copyWith(
+          data: pstate.data.map<RestaurantModel>((e) => e.id == id ? resp : e).toList()
+      );
+    }
   }
 }
