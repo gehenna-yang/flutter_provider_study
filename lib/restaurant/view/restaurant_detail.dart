@@ -1,8 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:infrearnclass/common/const/data.dart';
-import 'package:infrearnclass/common/dio/dio.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
 import 'package:infrearnclass/common/model/cusor_pagination_model.dart';
 import 'package:infrearnclass/common/utils/pagination_utils.dart';
@@ -14,16 +11,15 @@ import 'package:infrearnclass/restaurant/model/restaurant_detail_model.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
 import 'package:infrearnclass/restaurant/provider/restaurant_provider.dart';
 import 'package:infrearnclass/restaurant/provider/restaurant_rating_provider.dart';
-import 'package:infrearnclass/restaurant/repository/restaurant_repository.dart';
 import 'package:skeletons/skeletons.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'restaurantdetail';
+
   final String id;
-  final String? name;
 
   const RestaurantDetailScreen({
     required this.id,
-    this.name,
     Key? key
   }) : super(key: key);
 
@@ -56,7 +52,6 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
     }
 
     return DefaultLayout(
-      titletxt: widget.name,
       child: CustomScrollView(
         controller: controller,
         slivers: [
