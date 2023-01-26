@@ -1,8 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infrearnclass/common/view/root_tab.dart';
+import 'package:infrearnclass/common/view/splash_screen.dart';
+import 'package:infrearnclass/restaurant/view/restaurant_detail.dart';
 import 'package:infrearnclass/user/model/user_model.dart';
 import 'package:infrearnclass/user/provider/user_me_provider.dart';
+import 'package:infrearnclass/user/view/login_screen.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>((ref) {
   return AuthProvider(ref: ref);
@@ -20,6 +24,32 @@ class AuthProvider extends ChangeNotifier {
       }
     });
   }
+
+  List<GoRoute> get routes => [
+    GoRoute(
+      path: '/',
+      name: Root_Tab.routeName,
+      builder: (_, __) => Root_Tab(),
+      routes: [
+        GoRoute(
+          path: 'restaurant/:rid',
+          builder: (_, state) => RestaurantDetailScreen(
+              id: state.params['rid']!,
+          ),
+        ),
+      ]
+    ),
+    GoRoute(
+      path: '/splash',
+      name: SplashScreen.routeName,
+      builder: (_, __) => SplashScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      name: LoginScreen.routeName,
+      builder: (_, __) => LoginScreen(),
+    ),
+  ];
 
   // splash screen
   // 앱 처음 시작시 토큰 존재여부 확인

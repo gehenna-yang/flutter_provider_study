@@ -3,9 +3,12 @@ import 'package:infrearnclass/common/const/colors.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
 import 'package:infrearnclass/product/view/product_screen.dart';
 import 'package:infrearnclass/restaurant/view/restaurant_screen.dart';
+import 'package:infrearnclass/user/view/profile_screen.dart';
 
 class Root_Tab extends StatefulWidget {
-  // const Root_Tab({Key? key}) : super(key: key);
+  static String get routeName => 'home';
+
+  const Root_Tab({Key? key}) : super(key: key);
 
   @override
   State<Root_Tab> createState() => _Root_TabState();
@@ -50,7 +53,7 @@ class _Root_TabState extends State<Root_Tab> with SingleTickerProviderStateMixin
           RestaurantScreen(),
           ProductScreen(),
           Center(child: Container(child: Text('주문'),)),
-          Center(child: Container(child: Text('프로필'),)),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

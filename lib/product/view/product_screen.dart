@@ -14,7 +14,7 @@ class ProductScreen extends StatelessWidget {
       itembuilder: <ProductModel> (_, index, model) {
         return GestureDetector(
           onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => Restaurant_Detail_Screen(id: model.restaurant.id, name: model.restaurant.name,)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => RestaurantDetailScreen(id: model.restaurant.id, name: model.restaurant.name,)));
           },
           child: ProductCard.fromProductModel(
             model: model,

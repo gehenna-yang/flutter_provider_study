@@ -23,7 +23,7 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
         return GestureDetector(
           child: RestaurantCard.fromModel(model: model),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => Restaurant_Detail_Screen(id: model.id, name: model.name,)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => RestaurantDetailScreen(id: model.id, name: model.name,)));
           },
         );
       },

@@ -12,8 +12,12 @@ import 'package:infrearnclass/common/dio/dio.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
 import 'package:infrearnclass/common/secure_storage/secure_storage.dart';
 import 'package:infrearnclass/common/view/root_tab.dart';
+import 'package:infrearnclass/user/model/user_model.dart';
+import 'package:infrearnclass/user/provider/user_me_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'login';
+
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -21,12 +25,12 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  String userId = '';
-  String userPwd = '';
+  String userId = 'test@codefactory.ai';
+  String userPwd = 'testtest';
 
   @override
   Widget build(BuildContext context) {
-    final dio = ref.watch(dioProvider);
+    final state = ref.watch(userMeProvider);
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -59,39 +63,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () async { // login
-                    try{
-                      final rawString = '$userId:$userPwd';
-                      Codec<String, String> stringToBase64 = utf8.fuse(base64);
-
-                      String token = stringToBase64.encode(rawString);
-
-                      final resp = await dio.post(
-                        'http://$ip/auth/login',
-                        options: Options(
-                          headers: {
-                            'authorization': 'Basic $token',
-                          }
-                        ),
-                      );
-
-                      print('token: $token\nresp: ${resp.data}');
-
-                      final refreshtoken = resp.data['refreshToken'];
-                      final accesstoken = resp.data['accessToken'];
-
-                      final storage = ref.read(secureStorageProvider);
-
-                      storage.write(key: ACCESS_TOKEN_KEY, value: accesstoken);
-                      storage.write(key: REFRESH_TOKEN_KEY, value: refreshtoken);
-
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => Root_Tab()),
-                      );
-
-                    }catch(e){
-                      print(e);
-                    }
+                  onPressed: state is UserModelLoading ? null : () async { // login
+                    ref.read(userMeProvider.notifier).login(username: userId, password: userPwd);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: PRIMARY_COLOR,

@@ -17,21 +17,21 @@ import 'package:infrearnclass/restaurant/provider/restaurant_rating_provider.dar
 import 'package:infrearnclass/restaurant/repository/restaurant_repository.dart';
 import 'package:skeletons/skeletons.dart';
 
-class Restaurant_Detail_Screen extends ConsumerStatefulWidget {
+class RestaurantDetailScreen extends ConsumerStatefulWidget {
   final String id;
-  final String name;
+  final String? name;
 
-  const Restaurant_Detail_Screen({
+  const RestaurantDetailScreen({
     required this.id,
-    required this.name,
+    this.name,
     Key? key
   }) : super(key: key);
 
   @override
-  ConsumerState<Restaurant_Detail_Screen> createState() => _Restaurant_Detail_ScreenState();
+  ConsumerState<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
 }
 
-class _Restaurant_Detail_ScreenState extends ConsumerState<Restaurant_Detail_Screen> {
+class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen> {
   final ScrollController controller = ScrollController();
 
   @override
