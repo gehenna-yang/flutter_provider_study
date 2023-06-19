@@ -1,5 +1,7 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infrearnclass/common/const/colors.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
 import 'package:infrearnclass/common/model/cusor_pagination_model.dart';
 import 'package:infrearnclass/common/utils/pagination_utils.dart';
@@ -48,12 +50,26 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
   Widget build(BuildContext context) {
     final state = ref.watch(restaurantDetailProvider(widget.id));
     final ratingState = ref.watch(restaurantRatingProvider(widget.id));
+    final basket = ref.watch(basketProvider);
 
     if(state == null) {
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(),));
+      return const DefaultLayout(child: Center(child: CircularProgressIndicator(),));
     }
 
     return DefaultLayout(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: PRIMARY_COLOR,
+        onPressed: (){},
+        child: Badge(
+          showBadge: basket.isNotEmpty,
+          badgeContent: Text(basket.fold<int>(0, (previous, next) => previous + next.count).toString(),
+            style: const TextStyle(color: PRIMARY_COLOR, fontSize: 10),),
+          badgeStyle: const BadgeStyle(badgeColor: Colors.white),
+          child: const Icon(
+            Icons.shopping_basket_outlined
+          ),
+        ),
+      ),
       child: CustomScrollView(
         controller: controller,
         slivers: [
@@ -75,7 +91,7 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
     required List<RatingModel> models,
   }){
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, index) => Padding(
@@ -90,13 +106,13 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
 
   SliverPadding renderLoading() {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       sliver: SliverList(
         delegate: SliverChildListDelegate(
           List.generate(3, (index) => Padding(
             padding: const EdgeInsets.only(bottom: 32),
             child: SkeletonParagraph(
-              style: SkeletonParagraphStyle(
+              style: const SkeletonParagraphStyle(
                 lines: 5,
                 padding: EdgeInsets.zero
               ),
@@ -132,7 +148,7 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
     required List<RestaurantProductModel> products
   }) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           childCount: products.length,
