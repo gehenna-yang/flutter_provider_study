@@ -31,6 +31,7 @@ class _App extends ConsumerWidget {
       routeInformationProvider: router.routeInformationProvider,
     );
   }
-
-
 }
+
+// flutter pub run build_runner build
+// flutter pub run build_runner watch

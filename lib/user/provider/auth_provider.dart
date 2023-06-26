@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infrearnclass/common/view/root_tab.dart';
 import 'package:infrearnclass/common/view/splash_screen.dart';
+import 'package:infrearnclass/restaurant/view/basket_screen.dart';
 import 'package:infrearnclass/restaurant/view/restaurant_detail.dart';
 import 'package:infrearnclass/user/model/user_model.dart';
 import 'package:infrearnclass/user/provider/user_me_provider.dart';
@@ -39,6 +40,11 @@ class AuthProvider extends ChangeNotifier {
           ),
         ),
       ]
+    ),
+    GoRoute(
+      path: '/basket',
+      name: BasketScreen.routeName,
+      builder: (_, state) => BasketScreen(),
     ),
     GoRoute(
       path: '/splash',

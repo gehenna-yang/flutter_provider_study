@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infrearnclass/common/const/colors.dart';
 import 'package:infrearnclass/common/layout/default_layout.dart';
 import 'package:infrearnclass/common/model/cusor_pagination_model.dart';
@@ -14,6 +15,7 @@ import 'package:infrearnclass/restaurant/model/restaurant_detail_model.dart';
 import 'package:infrearnclass/restaurant/model/restaurant_model.dart';
 import 'package:infrearnclass/restaurant/provider/restaurant_provider.dart';
 import 'package:infrearnclass/restaurant/provider/restaurant_rating_provider.dart';
+import 'package:infrearnclass/restaurant/view/basket_screen.dart';
 import 'package:infrearnclass/user/provider/basket_provider.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -59,7 +61,9 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
     return DefaultLayout(
       floatingActionButton: FloatingActionButton(
         backgroundColor: PRIMARY_COLOR,
-        onPressed: (){},
+        onPressed: (){
+          context.pushNamed(BasketScreen.routeName);
+        },
         child: Badge(
           showBadge: basket.isNotEmpty,
           badgeContent: Text(basket.fold<int>(0, (previous, next) => previous + next.count).toString(),
