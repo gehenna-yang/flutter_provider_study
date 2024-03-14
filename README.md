@@ -1,4 +1,4 @@
-# inflearnclass
+# flutter provider study
 
 A new Flutter project.
 
